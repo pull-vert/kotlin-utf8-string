@@ -4,20 +4,18 @@
 
 package com.pullvert.string
 
-import kotlin.experimental.and
-
 @SinceKotlin("1.3")
 @Suppress("NON_PUBLIC_PRIMARY_CONSTRUCTOR_OF_INLINE_CLASS")
-public inline class AsciiString @PublishedApi internal constructor(private val bytes: ByteArray) : CharSequence {
+public inline class AsciiString @PublishedApi internal constructor(private val utf8bytes: Utf8ByteArray) : CharSequence {
 
     public override val length: Int
-        get() = bytes.size
+        get() = utf8bytes.size
 
     public override fun get(index: Int): Char {
-        if (index < 0 || index >= bytes.size) {
+        if (index < 0 || index >= utf8bytes.size) {
             throw IndexOutOfBoundsException("todo")
         }
-        return (bytes[index] and 0xFF.toByte()).toChar()
+        return utf8bytes[index].toChar()
     }
 
     public override fun subSequence(startIndex: Int, endIndex: Int): AsciiString {
@@ -25,5 +23,6 @@ public inline class AsciiString @PublishedApi internal constructor(private val b
     }
 }
 
+@SinceKotlin("1.3")
 @Suppress("NOTHING_TO_INLINE")
-public inline fun ByteArray.toAsciiString(): AsciiString = AsciiString(this)
+public inline fun ByteArray.toAsciiString(): AsciiString = AsciiString(this.toUtf8ByteArray())

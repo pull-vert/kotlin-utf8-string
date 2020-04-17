@@ -11,7 +11,8 @@ class AsciiStringTests {
 
     @Test
     fun verifyCharAt() {
-        val stringImpl = byteArrayOf(97).toAsciiString()
+        val bytes = byteArrayOf(97)
+        val stringImpl = bytes.toAsciiString()
         assertEquals('a', stringImpl[0])
         assertEquals(1, stringImpl.length)
     }
