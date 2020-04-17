@@ -1,0 +1,37 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm'
+    id "me.champeau.gradle.jmh" version "0.5.0"
+}
+
+compileJmhKotlin {
+    kotlinOptions {
+        freeCompilerArgs += ['-Xjvm-default=enable', "-Xinline-classes"]
+        jvmTarget = "1.8"
+    }
+}
+
+// It is better to use the following to run benchmarks, otherwise you may get unexpected errors:
+// ./gradlew --no-daemon cleanJmhJar jmh -Pjmh="RangeFilterSumBenchmark"
+jmh {
+    jmhVersion = '1.21'
+    duplicateClassesStrategy DuplicatesStrategy.INCLUDE
+    failOnError = true
+    resultFormat = 'CSV'
+    if (project.hasProperty('jmh')) {
+        include = ".*" + project.jmh + ".*"
+    }
+}
+
+dependencies {
+    implementation "org.openjdk.jmh:jmh-core:1.21"
+    implementation project(':kotlin-inline-string')
+
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+}
+
+compileKotlin {
+    kotlinOptions {
+        freeCompilerArgs = ["-Xinline-classes"]
+        jvmTarget = '1.8'
+    }
+}

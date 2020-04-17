@@ -1,0 +1,17 @@
+pluginManagement {
+    repositories {
+        //maven { url 'https://dl.bintray.com/kotlin/kotlin-dev' }
+        maven { url "https://kotlin.bintray.com/kotlin-eap" }
+        gradlePluginPortal()
+    }
+    plugins {
+        id 'org.jetbrains.kotlin.multiplatform' version "$kotlin_plugin_version"
+        id 'org.jetbrains.kotlin.jvm' version "$kotlin_plugin_version"
+    }
+}
+
+rootProject.name = 'kotlin-inline-string-base'
+
+include 'benchmarks'
+
+include 'kotlin-inline-string'

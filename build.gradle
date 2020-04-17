@@ -1,0 +1,19 @@
+plugins {
+    id 'org.jetbrains.kotlin.multiplatform' apply false
+    id 'org.jetbrains.kotlin.jvm' apply false
+}
+
+println("Using Gradle version: $gradle.gradleVersion")
+
+subprojects {
+    repositories {
+        mavenCentral()
+        maven { url "https://kotlin.bintray.com/kotlin-eap" }
+    }
+}
+
+// execute ./gradlew wrapper then remove .gradle directory when version change
+wrapper {
+    gradleVersion = '6.3'
+    distributionType = Wrapper.DistributionType.ALL
+}
