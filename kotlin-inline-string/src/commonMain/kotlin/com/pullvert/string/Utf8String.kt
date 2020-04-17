@@ -23,7 +23,12 @@ internal constructor(private val storage: ByteArray) : Collection<Utf8Byte>, Com
      */
     public operator fun get(index: Int): Utf8Byte = storage[index].toUtf8Byte()
 
-    /** Returns the number of elements in the array. */
+    /**
+     * Returns the byte-length in the byte array
+     *
+     * This size may not be the same as the number of chars in this String as an UTF-8 char needs between one to 4 bytes
+     * to encode in UTF-8
+     */
     public override val size: Int get() = storage.size
 
     /** Creates an iterator over the elements of the array. */
