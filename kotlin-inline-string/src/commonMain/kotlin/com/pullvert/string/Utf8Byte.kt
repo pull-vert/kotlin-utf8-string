@@ -7,8 +7,7 @@
 package com.pullvert.string
 
 @SinceKotlin("1.3")
-@PublishedApi
-internal inline class Utf8Byte
+public inline class Utf8Byte
 @Suppress("NON_PUBLIC_PRIMARY_CONSTRUCTOR_OF_INLINE_CLASS")
 @PublishedApi
 internal constructor(@PublishedApi internal val data: Byte) : Comparable<Utf8Byte> {

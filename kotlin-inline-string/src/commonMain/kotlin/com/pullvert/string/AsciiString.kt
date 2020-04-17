@@ -4,18 +4,21 @@
 
 package com.pullvert.string
 
+/**
+ * An immutable inline class that store a String as an UTF-8 encoded byte array in heap-memory
+ */
 @SinceKotlin("1.3")
 @Suppress("NON_PUBLIC_PRIMARY_CONSTRUCTOR_OF_INLINE_CLASS")
-public inline class AsciiString @PublishedApi internal constructor(private val utf8bytes: Utf8ByteArray) : CharSequence {
+public inline class AsciiString @PublishedApi internal constructor(private val bytes: ByteArray) : CharSequence {
 
     public override val length: Int
-        get() = utf8bytes.size
+        get() = bytes.size
 
     public override fun get(index: Int): Char {
-        if (index < 0 || index >= utf8bytes.size) {
+        if (index < 0 || index >= bytes.size) {
             throw IndexOutOfBoundsException("todo")
         }
-        return utf8bytes[index].toChar()
+        return bytes[index].toChar()
     }
 
     public override fun subSequence(startIndex: Int, endIndex: Int): AsciiString {
@@ -25,4 +28,4 @@ public inline class AsciiString @PublishedApi internal constructor(private val u
 
 @SinceKotlin("1.3")
 @Suppress("NOTHING_TO_INLINE")
-public inline fun ByteArray.toAsciiString(): AsciiString = AsciiString(this.toUtf8ByteArray())
+public inline fun ByteArray.toAsciiString(): AsciiString = AsciiString(this)
