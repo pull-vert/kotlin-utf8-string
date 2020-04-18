@@ -31,7 +31,9 @@ kotlin {
         }
     }
     jvm('jdk9') { // for jdk 9
+        withJava()
         compilations.main {
+            apply plugin: 'org.javamodularity.moduleplugin'
 
             sourceCompatibility = JavaVersion.VERSION_1_9
             targetCompatibility = JavaVersion.VERSION_1_9
@@ -41,7 +43,7 @@ kotlin {
             }
 
             dependencies {
-                implementation kotlin('stdlib-jdk8')
+                implementation kotlin('stdlib')
             }
         }
 
