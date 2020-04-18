@@ -74,7 +74,7 @@ internal constructor(private val storage: ByteArray) : Collection<Utf8Byte>, Com
  */
 @SinceKotlin("1.3")
 @Suppress("NOTHING_TO_INLINE")
-public inline fun ByteArray.toUtf8ByteArray(): Utf8String = Utf8String(this)
+public inline fun ByteArray.toUtf8String(): Utf8String = Utf8String(this)
 
 /** An iterator over a sequence of values of type `Utf8Byte`. */
 @SinceKotlin("1.3")
