@@ -30,13 +30,12 @@ kotlin {
             }
         }
     }
-    jvm('jdk9') { // for jdk 9
+    jvm('jdk8') { // for jdk 8
         withJava()
         compilations.main {
-            apply plugin: 'org.javamodularity.moduleplugin'
 
-            sourceCompatibility = JavaVersion.VERSION_1_9
-            targetCompatibility = JavaVersion.VERSION_1_9
+            sourceCompatibility = JavaVersion.VERSION_1_8
+            targetCompatibility = JavaVersion.VERSION_1_8
 
             kotlinOptions {
                 jvmTarget = "1.8"
@@ -81,7 +80,7 @@ kotlin.sourceSets.matching({ it.name.contains("Main") }).all { srcSet ->
     project.ext.set("kotlin.mpp.freeCompilerArgsForSourceSet.${srcSet.name}", "-Xexplicit-api=strict")
 }
 
-jdk9Test {
+jdk8Test {
     useJUnitPlatform()
     testLogging {
         events 'passed', 'failed', 'skipped'
