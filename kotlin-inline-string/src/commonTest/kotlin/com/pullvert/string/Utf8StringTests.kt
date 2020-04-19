@@ -17,8 +17,18 @@ class Utf8StringTests {
         val stringImpl = bytes.toUtf8String()
         assertFalse(stringImpl.isEmpty())
         val utf8Byte = stringImpl[0]
-        assertTrue(utf8Byte.isValidAscii)
+        assertTrue(utf8Byte.isAscii)
         assertEquals('a', utf8Byte.toChar())
         assertEquals(1, stringImpl.size)
+    }
+
+    @Test
+    fun verifySingleAsciiCharCodePoint() {
+        val bytes = byteArrayOf(97)
+        val stringImpl = bytes.toUtf8String()
+        stringImpl.forEachCodePointIndexed { index, codePoint ->
+            assertEquals(0, index)
+            assertEquals('a', codePoint.toChar())
+        }
     }
 }

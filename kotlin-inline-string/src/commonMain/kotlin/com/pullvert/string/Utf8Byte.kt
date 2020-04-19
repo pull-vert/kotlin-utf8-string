@@ -6,6 +6,8 @@
 
 package com.pullvert.string
 
+import kotlin.experimental.and
+
 @SinceKotlin("1.3")
 public inline class Utf8Byte
 @Suppress("NON_PUBLIC_PRIMARY_CONSTRUCTOR_OF_INLINE_CLASS")
@@ -20,7 +22,7 @@ internal constructor(@PublishedApi internal val data: Byte) : Comparable<Utf8Byt
         /**
          * A constant holding the max value an ASCII Utf8Byte can have.
          */
-        public const val MAX_ASCII_VALUE: Byte = 0xFF.toByte()
+        public const val MAX_ASCII_VALUE: Byte = 0x7F
     }
 
     /**
@@ -35,9 +37,9 @@ internal constructor(@PublishedApi internal val data: Byte) : Comparable<Utf8Byt
      *
      * In kotlin byte IS a byte -> there is no need to mask out the higher bits ('X and 0xFF'), as they are already zero
      */
-    public inline fun toChar(): Char = data.toChar()
+    public inline fun toChar(): Char = (data and 0xFF.toByte()).toChar()
 
-    public val isValidAscii: Boolean get() = data > MIN_ASCII_VALUE
+    public val isAscii: Boolean get() = data > MIN_ASCII_VALUE
 
     /**
      * Compares this value with the specified value for order.
@@ -45,13 +47,14 @@ internal constructor(@PublishedApi internal val data: Byte) : Comparable<Utf8Byt
      * or a positive number if it's greater than other.
      */
     @Suppress("OVERRIDE_BY_INLINE")
-    public override inline operator fun compareTo(other: Utf8Byte): Int = this.data.compareTo(other.data)
+    public override inline operator fun compareTo(other: Utf8Byte): Int =
+            this.toChar().compareTo(other.toChar())
 
     public override fun toString(): String =
-            if (isValidAscii) {
-                "valid ascii char, byte value=$data, char value=\'{${toChar()}\'"
+            if (isAscii) {
+                "ASCII char, byte value=$data, char value=\'{${toChar()}\'"
             } else {
-                "invalid ascii char, byte value=$data"
+                "Not ASCII char, byte value=$data"
             }
 }
 

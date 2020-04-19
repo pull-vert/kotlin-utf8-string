@@ -13,7 +13,7 @@ import kotlin.math.min
 public inline class Utf8String
 @Suppress("NON_PUBLIC_PRIMARY_CONSTRUCTOR_OF_INLINE_CLASS")
 @PublishedApi
-internal constructor(private val storage: ByteArray) : Collection<Utf8Byte>, Comparable<Utf8String> {
+internal constructor(@PublishedApi internal val storage: ByteArray) : Collection<Utf8Byte>, Comparable<Utf8String> {
 
     /**
      * Returns the array element at the given [index]. This method can be called using the index operator.
@@ -36,8 +36,8 @@ internal constructor(private val storage: ByteArray) : Collection<Utf8Byte>, Com
 
     private class Iterator internal constructor(private val array: ByteArray) : Utf8ByteIterator() {
         private var index = 0
-        override fun hasNext() = index < array.size
-        override fun nextUtf8Byte() =
+        override fun hasNext(): Boolean = index < array.size
+        override fun nextUtf8Byte(): Utf8Byte =
                 if (index < array.size) {
                     array[index++].toUtf8Byte()
                 } else {
@@ -61,9 +61,15 @@ internal constructor(private val storage: ByteArray) : Collection<Utf8Byte>, Com
     override fun isEmpty(): Boolean = this.storage.size == 0
 
     override fun compareTo(other: Utf8String): Int {
-        val v1 = this.storage
-        val v2 = other.storage
-        return v1.compareTo(v2)
+        val len1 = this.size
+        val len2 = other.size
+        val lim: Int = min(len1, len2)
+        for (k in 0 until lim) {
+            if (this[k] != other[k]) {
+                return this[k].compareTo(other[k])
+            }
+        }
+        return len1 - len2
     }
 }
 
@@ -75,24 +81,3 @@ internal constructor(private val storage: ByteArray) : Collection<Utf8Byte>, Com
 @SinceKotlin("1.3")
 @Suppress("NOTHING_TO_INLINE")
 public inline fun ByteArray.toUtf8String(): Utf8String = Utf8String(this)
-
-/** An iterator over a sequence of values of type `Utf8Byte`. */
-@SinceKotlin("1.3")
-public abstract class Utf8ByteIterator internal constructor() : Iterator<Utf8Byte> {
-    final override fun next(): Utf8Byte = nextUtf8Byte()
-
-    /** Returns the next value in the sequence without boxing. */
-    public abstract fun nextUtf8Byte(): Utf8Byte
-}
-
-private fun ByteArray.compareTo(other: ByteArray): Int {
-    val len1 = this.size
-    val len2 = other.size
-    val lim: Int = min(len1, len2)
-    for (k in 0 until lim) {
-        if (this[k] != other[k]) {
-            return this[k].toChar() - other[k].toChar()
-        }
-    }
-    return len1 - len2
-}
