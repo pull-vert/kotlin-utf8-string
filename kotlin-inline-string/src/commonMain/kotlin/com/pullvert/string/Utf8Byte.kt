@@ -6,8 +6,6 @@
 
 package com.pullvert.string
 
-import kotlin.experimental.and
-
 @SinceKotlin("1.3")
 public inline class Utf8Byte
 @Suppress("NON_PUBLIC_PRIMARY_CONSTRUCTOR_OF_INLINE_CLASS")
@@ -32,14 +30,14 @@ internal constructor(@PublishedApi internal val data: Byte) : Comparable<Utf8Byt
      */
     public inline fun toByte(): Byte = data
 
+    public inline fun toInt(): Int = data.toInt() and 0xff
+
     /**
      * Converts this [Utf8Byte] value to [Char].
-     *
-     * In kotlin byte IS a byte -> there is no need to mask out the higher bits ('X and 0xFF'), as they are already zero
      */
-    public inline fun toChar(): Char = (data and 0xFF.toByte()).toChar()
+    public inline fun toChar(): Char = toInt().toChar()
 
-    public val isAscii: Boolean get() = data > MIN_ASCII_VALUE
+    public inline val isAscii: Boolean get() = toInt() and 0x80 == 0
 
     /**
      * Compares this value with the specified value for order.

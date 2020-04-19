@@ -26,9 +26,17 @@ class Utf8StringTests {
     fun verifySingleAsciiCharCodePoint() {
         val bytes = byteArrayOf(97)
         val stringImpl = bytes.toUtf8String()
-        stringImpl.forEachCodePointIndexed { index, codePoint ->
+        for ((index, codePoint) in stringImpl.withCodePointIndex()) {
             assertEquals(0, index)
             assertEquals('a', codePoint.toChar())
         }
+    }
+
+    @Test
+    fun alefzef() {
+        val bytes = byteArrayOf(0xbd.toByte(), 0xb2.toByte(), 0x3d.toByte(), 0xbc.toByte(), 0x20.toByte(), 0xe2.toByte(),
+                0x8c.toByte(), 0x98.toByte())
+        val utf8String = Utf8String(bytes)
+        println(utf8String)
     }
 }

@@ -71,6 +71,14 @@ internal constructor(@PublishedApi internal val storage: ByteArray) : Collection
         }
         return len1 - len2
     }
+
+    public override fun toString(): String {
+        val sb = StringBuilder()
+        for ((_, codePoint) in this.withCodePointIndex()) {
+            sb.append(codePoint.toChar())
+        }
+        return sb.toString()
+    }
 }
 
 /**

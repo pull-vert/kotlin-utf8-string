@@ -6,8 +6,6 @@
 
 package com.pullvert.string
 
-import kotlin.experimental.and
-
 @SinceKotlin("1.3")
 public inline class CodePoint
 @Suppress("NON_PUBLIC_PRIMARY_CONSTRUCTOR_OF_INLINE_CLASS")
@@ -39,7 +37,11 @@ internal constructor(@PublishedApi internal val data: Int) : Comparable<CodePoin
         /**
          * Returns an instance that encapsulates the given [value] as successful value.
          */
-        public inline fun oneByte(value: Byte): CodePoint =
-                CodePoint((value and 0xFF.toByte()).toInt())
+        public inline fun oneByte(value: Int): CodePoint = CodePoint(value)
+
+        /**
+         * Returns an instance that encapsulates the given [value] as successful value.
+         */
+        public inline fun replacementCharacter(): CodePoint = CodePoint(0xFFFD)
     }
 }
