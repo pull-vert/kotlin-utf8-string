@@ -48,20 +48,18 @@ internal class IndexingCodePointIterator(private val iterator: Utf8ByteIterator)
         val codePointIndex = index
         var byte = iterator.nextUtf8Byte().toInt()
         index++
-        var value = 0
         if (byte and 0x80 == 0) { // ASCII
             return IndexedCodePoint(codePointIndex, CodePoint(byte))
         }
         // first unicode byte
-        var byteCount = 0
+        var byteCount: Int
+        var value: Int
         when {
             byte < 0x80 -> {
                 return IndexedCodePoint(codePointIndex, CodePoint(byte))
             }
             byte < 0xC0 -> {
                 return IndexedCodePoint(codePointIndex, CodePoint.replacementCharacter())
-                /*byteCount = 0
-                value = byte and 0x7F*/
             }
             byte < 0xE0 -> {
                 byteCount = 1
@@ -98,6 +96,7 @@ internal class IndexingCodePointIterator(private val iterator: Utf8ByteIterator)
     }
 }
 
+@SinceKotlin("1.3")
 public data class IndexedCodePoint(public val index: Int, public val codePoint: CodePoint)
 
 /**
@@ -107,10 +106,13 @@ public data class IndexedCodePoint(public val index: Int, public val codePoint: 
 private inline fun lowSurrogate(codePoint: Int): Int = (codePoint and 0x3ff) + MinLowSurrogate
 
 @Suppress("NOTHING_TO_INLINE")
-private inline fun highSurrogate(codePoint: Int): Int = (codePoint ushr 10) + HighSurrogateMagic
+@PublishedApi
+internal inline fun highSurrogate(codePoint: Int): Int = (codePoint ushr 10) + HighSurrogateMagic
 
-private const val MaxCodePoint = 0x10ffff
+@PublishedApi
+internal const val MaxCodePoint = 0x10ffff
 internal const val MinLowSurrogate = 0xdc00
 private const val MinHighSurrogate = 0xd800
 private const val MinSupplementary = 0x10000
+@PublishedApi
 internal const val HighSurrogateMagic = MinHighSurrogate - (MinSupplementary ushr 10)

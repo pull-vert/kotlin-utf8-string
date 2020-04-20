@@ -89,3 +89,10 @@ internal constructor(@PublishedApi internal val storage: ByteArray) : Collection
 @SinceKotlin("1.3")
 @Suppress("NOTHING_TO_INLINE")
 public inline fun ByteArray.toUtf8String(): Utf8String = Utf8String(this)
+
+@SinceKotlin("1.3")
+@Suppress("NOTHING_TO_INLINE")
+@ExperimentalStdlibApi
+public inline fun String.toUtf8String(): Utf8String = Utf8String(this.encodeToByteArray())
+
+

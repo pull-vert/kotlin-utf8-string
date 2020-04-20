@@ -12,17 +12,6 @@ public inline class Utf8Byte
 @PublishedApi
 internal constructor(@PublishedApi internal val data: Byte) : Comparable<Utf8Byte> {
 
-    public companion object {
-        /**
-         * A constant holding the min value an ASCII Utf8Byte can have.
-         */
-        public const val MIN_ASCII_VALUE: Byte = 0x00
-        /**
-         * A constant holding the max value an ASCII Utf8Byte can have.
-         */
-        public const val MAX_ASCII_VALUE: Byte = 0x7F
-    }
-
     /**
      * Converts this [Utf8Byte] value to [Byte].
      *
@@ -48,11 +37,14 @@ internal constructor(@PublishedApi internal val data: Byte) : Comparable<Utf8Byt
     public override inline operator fun compareTo(other: Utf8Byte): Int =
             this.toChar().compareTo(other.toChar())
 
+    @ExperimentalUnsignedTypes
+    public inline fun toHex(): String = data.toUByte().toString(16)
+
     public override fun toString(): String =
             if (isAscii) {
-                "ASCII char, byte value=$data, char value=\'{${toChar()}\'"
+                "0x${toHex().toUpperCase()} '${toChar()}'"
             } else {
-                "Not ASCII char, byte value=$data"
+                "0x${toHex().toUpperCase()} not ASCII"
             }
 }
 

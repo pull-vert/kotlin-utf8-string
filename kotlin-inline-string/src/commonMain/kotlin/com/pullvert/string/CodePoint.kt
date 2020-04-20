@@ -27,21 +27,79 @@ internal constructor(@PublishedApi internal val data: Int) : Comparable<CodePoin
     public override inline operator fun compareTo(other: CodePoint): Int =
             this.toChar().compareTo(other.toChar())
 
-    // companion with constructors
+    @ExperimentalUnsignedTypes
+    public inline fun toHex(): String = data.toUInt().toString(16)
+
+    public override fun toString(): String = "U+${toHex().toUpperCase()} '${toChar()}'"
 
     /**
-     * Companion object for [Result] class that contains its constructor functions
-     * [success] and [failure].
+     * Companion object for [CodePoint] class that contains its constructor functions
      */
     public companion object {
         /**
-         * Returns an instance that encapsulates the given [value] as successful value.
-         */
-        public inline fun oneByte(value: Int): CodePoint = CodePoint(value)
-
-        /**
-         * Returns an instance that encapsulates the given [value] as successful value.
+         * Returns an instance for unicode Replacement Character 0xFFFD
          */
         public inline fun replacementCharacter(): CodePoint = CodePoint(0xFFFD)
     }
 }
+
+@SinceKotlin("1.3")
+public inline fun Char.toCodePoint() : CodePoint = CodePoint(this.toInt())
+
+@SinceKotlin("1.3")
+public data class SizedCodePoint(public val codePoint: CodePoint, public val size: Int)
+
+@SinceKotlin("1.3")
+public inline fun Utf8String.codePointAt(index: Int) : SizedCodePoint {
+    var i = index
+    // use the primitive unboxed 'nextUtf8Byte' method
+    var byte = get(i).toInt()
+    i++
+    if (byte and 0x80 == 0) { // ASCII
+        return SizedCodePoint(CodePoint(byte), 1)
+    }
+    // first unicode byte
+    var byteCount: Int
+    var value: Int
+    when {
+        byte < 0x80 -> {
+            return SizedCodePoint(CodePoint(byte), 1)
+        }
+        byte < 0xC0 -> {
+            return SizedCodePoint(CodePoint.replacementCharacter(), 1)
+        }
+        byte < 0xE0 -> {
+            byteCount = 1
+            value = byte and 0x3F
+        }
+        byte < 0xF0 -> {
+            byteCount = 2
+            value = byte and 0x1F
+        }
+        byte < 0xF8 -> {
+            byteCount = 3
+            value = byte and 0xF
+        }
+        else -> return SizedCodePoint(CodePoint.replacementCharacter(), 1)
+    }
+    val size = byteCount + 1
+    while (byteCount > 0) {
+        byte = get(i).toInt()
+        i++
+        // trailing unicode byte
+        value = (value shl 6) or (byte and 0x7f)
+        byteCount--
+    }
+
+    return if (value ushr 16 == 0) {
+        SizedCodePoint(CodePoint(value), size)
+    } else {
+        if (value > MaxCodePoint) {
+            SizedCodePoint(CodePoint.replacementCharacter(), size)
+        } else {
+            // fixme : what to do with lowSurrogate ?
+            SizedCodePoint(CodePoint(highSurrogate(value)), size)
+        }
+    }
+}
+
