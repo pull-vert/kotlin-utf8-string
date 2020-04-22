@@ -24,7 +24,7 @@ jmh {
 
 dependencies {
     implementation "org.openjdk.jmh:jmh-core:1.21"
-    implementation project(':kotlin-inline-string')
+    implementation project(':kotlin-utf8-string')
 
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
 }

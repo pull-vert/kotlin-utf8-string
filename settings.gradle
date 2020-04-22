@@ -10,8 +10,8 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'kotlin-inline-string-base'
+rootProject.name = 'kotlin-utf8-string-package'
 
 include 'benchmarks'
 
-include 'kotlin-inline-string'
+include 'kotlin-utf8-string'
