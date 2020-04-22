@@ -83,18 +83,6 @@ kotlin {
             }
         }
     }
-
-    task emptyJavadoc(type: Jar) {
-        classifier = "javadoc"
-    }
-
-    targets.all { target ->
-        def publication = publishing.publications.findByName(target.name)
-
-        if (publication != null) {
-            publication.artifact emptyJavadoc
-        }
-    }
 }
 
 // Force strict explicit API for better source code readability
@@ -129,26 +117,4 @@ publishing {
             }
         }
     }
-
-    /*publications {
-        maven(MavenPublication) {
-            artifactId = project.name
-            from components.java
-            pom {
-                name = project.name
-                description = 'kotlin-inline-string was born as a challenge to provide the smallest memory footprint UTF-8 String to several platforms (JVM, JS and native) thanks to Kotlin multiplatform and inline classes. It mimics the golang String model.'
-                url = 'https://github.com/pull-vert/kotlin-utf8-string'
-                licenses {
-                    license {
-                        name = 'The Unlicence'
-                        url = 'https://unlicense.org'
-                    }
-                }
-                scm {
-                    connection = 'scm:git:git://github.com/pull-vert/kotlin-utf8-string.git'
-                    url = 'https://github.com/pull-vert/kotlin-utf8-string.git'
-                }
-            }
-        }
-    }*/
 }
