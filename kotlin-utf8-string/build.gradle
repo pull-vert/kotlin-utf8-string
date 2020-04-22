@@ -83,6 +83,10 @@ kotlin {
             }
         }
     }
+    //mingwX64()
+    androidNativeArm64()
+    linuxArm64()
+    //linuxX64()
 }
 
 // Force strict explicit API for better source code readability

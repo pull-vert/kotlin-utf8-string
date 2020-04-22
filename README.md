@@ -1,6 +1,7 @@
 # kotlin-utf8-string
 
 [![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)
+[![Download](https://api.bintray.com/packages/pull-vert/kotlin-utf8-string/kotlin-utf8-string/images/download.svg)](https://bintray.com/pull-vert/kotlin-utf8-string/kotlin-utf8-string/_latestVersion)
 
 kotlin-utf8-string was born as a challenge to provide the smallest memory footprint UTF-8 String to several platforms
 (JVM, JS and native) thanks to Kotlin multiplatform and inline classes. It mimics the golang String model.
@@ -9,6 +10,22 @@ Inline classes allow adding behavior to the extended type, without any runtime c
 * a Utf8String is just a primitive UTF-8 byte array at runtime
 * a Utf8Byte is just a primitive byte at runtime
 * a CodePoint is just a primitive int at runtime
+
+## Dependency
+
+kotlin-utf8-string is a dependency you can add to your project.
+
+Use the platform you need (jvm, js, androidnativearm64 or linuxarm64).
+
+```groovy
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation 'com.pullvert.kotlin-utf8-string:kotlin-utf8-string-jvm:0.0.3'
+}
+```
 
 ## UTF-8
 
