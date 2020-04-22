@@ -1,8 +1,8 @@
-# kotlin-inline-string
+# kotlin-utf8-string
 
 [![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)
 
-kotlin-inline-string was born as a challenge to provide the smallest memory footprint UTF-8 String to several platforms
+kotlin-utf8-string was born as a challenge to provide the smallest memory footprint UTF-8 String to several platforms
 (JVM, JS and native) thanks to Kotlin multiplatform and inline classes. It mimics the golang String model.
 
 Inline classes allow adding behavior to the extended type, without any runtime cost :
@@ -22,15 +22,15 @@ Code points with lower numerical values, which tend to occur more frequently, ar
 The first 128 characters of Unicode, which correspond one-to-one with ASCII, are encoded using a single byte with the
 same binary value as ASCII, so that valid ASCII text is valid UTF-8-encoded Unicode as well.
 
-## use UTF-8 String in Kotlin with kotlin-inline-string : Utf8String, Utf8Byte and CodePoint
+## use UTF-8 String in Kotlin with kotlin-utf8-string : Utf8String, Utf8Byte and CodePoint
 
-source : this is this [golang blog article](https://blog.golang.org/strings) adapted to kotlin-inline-string.
+source : this is this [golang blog article](https://blog.golang.org/strings) adapted to kotlin-utf8-string.
 
 ### What is a string?
 
 Let's start with some basics.
 
-In kotlin-inline-string, a Utf8String is just a read-only array of bytes.
+In kotlin-utf8-string, a Utf8String is just a read-only array of bytes.
 
 It's important to state right up front that a Utf8String holds arbitrary bytes. It is not required to hold Unicode text,
 UTF-8 text, or any other predefined format. As far as the content of a Utf8String is concerned, it is exactly equivalent
@@ -101,9 +101,9 @@ of different sequences of code points, and therefore different sequences of UTF-
 The concept of character in computing is therefore ambiguous, or at least confusing, so we use it with care. To make
 things dependable, there are normalization techniques that guarantee that a given character is always represented by the
 same code points, but that subject takes us too far off the topic.
-**kotlin-inline-string do not offer normalization** for now.
+**kotlin-utf8-string do not offer normalization** for now.
 
-kotlin-inline-string defines the ```CodePoint``` type as an inline class that wraps an Int, so programs can be clear when
+kotlin-utf8-string defines the ```CodePoint``` type as an inline class that wraps an Int, so programs can be clear when
 an integer value represents a code point. Moreover, you can easily get the CodePoint from a character constant as follow
 
 ```kotlin
@@ -117,11 +117,11 @@ Will output the unicode hexadecimal value and the character :
 To summarize, here are the salient points:
 * A Utf8String holds arbitrary bytes.
 * A valid UTF-8 byte sequence represent a sequence of Unicode ```CodePoint```s.
-* No guarantee is made in kotlin-inline-string that characters in strings are normalized.
+* No guarantee is made in kotlin-utf8-string that characters in strings are normalized.
 
 ### Range loops
 
-There's really only one way that kotlin-inline-string treats UTF-8 specially, and that is when using a specific for
+There's really only one way that kotlin-utf8-string treats UTF-8 specially, and that is when using a specific for
 range loop on a string.
 
 We've seen what happens with a regular for loop. A for range loop, by contrast, decodes one UTF-8-encoded CodePoint on
@@ -176,7 +176,7 @@ characters. A ```Utf8String``` might not even hold characters. In fact, the defi
 would be a mistake to try to resolve the ambiguity by defining that strings are made of characters.
 
 There's much more to say about Unicode, UTF-8, and the world of multilingual text processing, but it is enough for now.
-We hope you have a better understanding of how kotlin-inline-string ```Utf8String``` behave and that, although it may
+We hope you have a better understanding of how kotlin-utf8-string ```Utf8String``` behave and that, although it may
 contain arbitrary bytes, UTF-8 is a central part of its design.
 
 ## Full sample
