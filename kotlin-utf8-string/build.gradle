@@ -2,6 +2,8 @@ import org.jetbrains.kotlin.config.KotlinCompilerVersion
 
 plugins {
     id 'org.jetbrains.kotlin.multiplatform'
+    id 'org.jetbrains.dokka'
+    id 'maven-publish'
 }
 
 println("Using Kotlin compiler version: $KotlinCompilerVersion.VERSION")
@@ -46,6 +48,7 @@ kotlin {
         }
     }
     jvm() { // for jdk 8
+        withJava()
         compilations.main {
 
             sourceCompatibility = JavaVersion.VERSION_1_8
@@ -80,6 +83,18 @@ kotlin {
             }
         }
     }
+
+    task emptyJavadoc(type: Jar) {
+        classifier = "javadoc"
+    }
+
+    targets.all { target ->
+        def publication = publishing.publications.findByName(target.name)
+
+        if (publication != null) {
+            publication.artifact emptyJavadoc
+        }
+    }
 }
 
 // Force strict explicit API for better source code readability
@@ -93,4 +108,47 @@ jvmTest {
         events 'passed', 'failed', 'skipped'
         showStandardStreams = true
     }
+}
+
+dokka {
+    outputFormat = 'gfm'
+    outputDirectory = "$buildDir/dokka"
+}
+
+publishing {
+    repositories {
+        maven {
+            def user = 'pull-vert'
+            def repo = 'kotlin-utf8-string'
+            def name = 'kotlin-utf8-string'
+            url = "https://api.bintray.com/maven/$user/$repo/$name/;publish=0"
+
+            credentials {
+                username = bintray_user //this usually comes from gradle.properties file in ~/.gradle
+                password = bintray_api_key //this usually comes from gradle.properties file in ~/.gradle
+            }
+        }
+    }
+
+    /*publications {
+        maven(MavenPublication) {
+            artifactId = project.name
+            from components.java
+            pom {
+                name = project.name
+                description = 'kotlin-inline-string was born as a challenge to provide the smallest memory footprint UTF-8 String to several platforms (JVM, JS and native) thanks to Kotlin multiplatform and inline classes. It mimics the golang String model.'
+                url = 'https://github.com/pull-vert/kotlin-utf8-string'
+                licenses {
+                    license {
+                        name = 'The Unlicence'
+                        url = 'https://unlicense.org'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git://github.com/pull-vert/kotlin-utf8-string.git'
+                    url = 'https://github.com/pull-vert/kotlin-utf8-string.git'
+                }
+            }
+        }
+    }*/
 }

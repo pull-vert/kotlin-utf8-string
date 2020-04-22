@@ -7,6 +7,7 @@ pluginManagement {
     plugins {
         id 'org.jetbrains.kotlin.multiplatform' version "$kotlin_plugin_version"
         id 'org.jetbrains.kotlin.jvm' version "$kotlin_plugin_version"
+        id 'org.jetbrains.dokka' version "$dokka_plugin_version"
     }
 }
 
