@@ -44,50 +44,47 @@ internal constructor(@PublishedApi internal val data: Int) : Comparable<CodePoin
 }
 
 @SinceKotlin("1.3")
-public inline fun Char.toCodePoint() : CodePoint = CodePoint(this.toInt())
+public inline fun Char.toCodePoint(): CodePoint = CodePoint(this.toInt())
 
 @SinceKotlin("1.3")
 public data class SizedCodePoint(public val codePoint: CodePoint, public val size: Int)
 
 @SinceKotlin("1.3")
-public inline fun Utf8String.codePointAt(index: Int) : SizedCodePoint {
+public inline fun Utf8String.codePointAt(index: Int): SizedCodePoint {
     var i = index
     // use the primitive unboxed 'nextUtf8Byte' method
-    var byte = get(i).toInt()
+    var byteAsInt = get(i).toInt()
     i++
-    if (byte and 0x80 == 0) { // ASCII
-        return SizedCodePoint(CodePoint(byte), 1)
+    if (byteAsInt and 0x80 == 0) { // ASCII
+        return SizedCodePoint(CodePoint(byteAsInt), 1)
     }
     // first unicode byte
     var byteCount: Int
     var value: Int
     when {
-        byte < 0x80 -> {
-            return SizedCodePoint(CodePoint(byte), 1)
-        }
-        byte < 0xC0 -> {
+        byteAsInt < 0xC0 -> {
             return SizedCodePoint(CodePoint.replacementCharacter(), 1)
         }
-        byte < 0xE0 -> {
+        byteAsInt < 0xE0 -> {
             byteCount = 1
-            value = byte and 0x3F
+            value = byteAsInt and 0x3F
         }
-        byte < 0xF0 -> {
+        byteAsInt < 0xF0 -> {
             byteCount = 2
-            value = byte and 0x1F
+            value = byteAsInt and 0x1F
         }
-        byte < 0xF8 -> {
+        byteAsInt < 0xF8 -> {
             byteCount = 3
-            value = byte and 0xF
+            value = byteAsInt and 0xF
         }
         else -> return SizedCodePoint(CodePoint.replacementCharacter(), 1)
     }
     val size = byteCount + 1
     while (byteCount > 0) {
-        byte = get(i).toInt()
+        byteAsInt = get(i).toInt()
         i++
         // trailing unicode byte
-        value = (value shl 6) or (byte and 0x7f)
+        value = (value shl 6) or (byteAsInt and 0x7f)
         byteCount--
     }
 
@@ -102,4 +99,3 @@ public inline fun Utf8String.codePointAt(index: Int) : SizedCodePoint {
         }
     }
 }
-
